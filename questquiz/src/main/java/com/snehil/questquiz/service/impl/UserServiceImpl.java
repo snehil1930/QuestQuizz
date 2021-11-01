@@ -5,14 +5,19 @@ import com.snehil.questquiz.entity.UserRole;
 import com.snehil.questquiz.repository.RoleRepository;
 import com.snehil.questquiz.repository.UserRepository;
 import com.snehil.questquiz.service.UserService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 @Slf4j
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserServiceImpl implements UserService {
 
 
@@ -34,6 +39,20 @@ public class UserServiceImpl implements UserService {
 
             user1=this.userRepository.save(user);
             log.info("New user is created with id {}",user1.getUserId());
+        }
+    }
+
+    @Override
+    public Optional<User> getUser(String userId) {
+        return Optional.of(userRepository.findByUserId(userId));
+    }
+
+    @Override
+    public User updateUser(User user, String id){
+        if(getUser(id).isPresent()){
+            return userRepository.save(user);
+        } else{
+            return null;
         }
     }
 }
